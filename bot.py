@@ -6,7 +6,7 @@ import requests
 from environs import Env
 
 
-def get_lesson_review(server_answer):
+def get_lesson_summary(server_answer):
     lesson_title = server_answer['new_attempts'][0]['lesson_title']
     lesson_url = server_answer['new_attempts'][0]['lesson_url']
 
@@ -15,7 +15,7 @@ def get_lesson_review(server_answer):
     else:
         lesson_assessment = 'Преподавателю все понравилось, можно приступать к следующему уроку.'
     
-    return lesson_title, lesson_url, lesson_assessment
+    return f'Преподаватель проверил работу "{lesson_title}". \n \n {lesson_url} \n \n {lesson_assessment}'
 
 
 def main():
@@ -48,11 +48,9 @@ def main():
                 params['timestamp'] = server_answer['last_attempt_timestamp']
                 logging.info('Статус проверки работы изменился')
                 
-                lesson_title, lesson_url, lesson_assessment = get_lesson_review(server_answer)
+                lesson_summary = get_lesson_summary(server_answer)
 
-                bot.send_message(chat_id=CHAT_ID,
-                                text=f'Преподаватель проверил работу "{lesson_title}". \n \n {lesson_url} \n \n {lesson_assessment}'
-                                )
+                bot.send_message(chat_id=CHAT_ID, text=lesson_summary)
 
         except requests.exceptions.ReadTimeout:
             logging.error('ReadTimeout')
