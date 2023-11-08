@@ -9,11 +9,11 @@ from environs import Env
 DEVMAN_URL = 'https://dvmn.org/api/long_polling/'
 
 
-def get_lesson_summary(response_object):
-    lesson_title = response_object['new_attempts'][0]['lesson_title']
-    lesson_url = response_object['new_attempts'][0]['lesson_url']
+def get_lesson_summary(review_summary):
+    lesson_title = review_summary['new_attempts'][0]['lesson_title']
+    lesson_url = review_summary['new_attempts'][0]['lesson_url']
 
-    if response_object['new_attempts'][0]['is_negative']:
+    if review_summary['new_attempts'][0]['is_negative']:
         lesson_assessment = 'К сожалениию, в работе нашлись ошибки.'
     else:
         lesson_assessment = 'Преподавателю все понравилось, можно приступать к следующему уроку.'
@@ -42,15 +42,15 @@ def main():
             response = requests.get(DEVMAN_URL, headers=headers, params=params, timeout=devman_timeout)
             response.raise_for_status()
 
-            response_object = response.json()
+            review_summary = response.json()
 
-            if response_object['status'] == 'timeout':
-                params['timestamp'] = response_object['timestamp_to_request']
-            elif response_object['status'] == 'found':
-                params['timestamp'] = response_object['last_attempt_timestamp']
+            if review_summary['status'] == 'timeout':
+                params['timestamp'] = review_summary['timestamp_to_request']
+            elif review_summary['status'] == 'found':
+                params['timestamp'] = review_summary['last_attempt_timestamp']
                 logging.info('Статус проверки работы изменился')
                 
-                lesson_summary = get_lesson_summary(response_object)
+                lesson_summary = get_lesson_summary(review_summary)
 
                 bot.send_message(chat_id=chat_id, text=lesson_summary)
 
