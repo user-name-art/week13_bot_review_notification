@@ -25,7 +25,7 @@ def main():
     env = Env()
     env.read_env()
 
-    logging.basicConfig(level=logging.INFO, filename='log.log', format='%(asctime)s %(levelname)s %(message)s')
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
 
     bot_token = env.str('TG_BOT_TOKEN')
     chat_id = env.str('TG_CHAT')
@@ -36,6 +36,7 @@ def main():
     headers = {'Authorization': f'Token {devman_token}'}
 
     bot = telegram.Bot(token=bot_token)
+    logging.info('bot started')
 
     while True:
         try:
