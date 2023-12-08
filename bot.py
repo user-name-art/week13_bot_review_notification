@@ -78,7 +78,7 @@ def main():
             time.sleep(30)
         except Exception as err:
             logger.error('Возникла следующая ошибка:')
-            logger.error(err, exc_info=True)
+            logger.exception(err)
 
 
 if __name__ == '__main__':
