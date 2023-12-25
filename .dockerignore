@@ -1,0 +1,9 @@
+.venv
+.git
+
+.gitignore
+*.log
+README.md
+
+.env.template
+.env
