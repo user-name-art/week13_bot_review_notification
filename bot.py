@@ -33,9 +33,9 @@ def get_lesson_summary(review_summary):
         lesson_assessment = 'К сожалениию, в работе нашлись ошибки.'
     else:
         lesson_assessment = 'Преподавателю все понравилось, можно приступать к следующему уроку.'
-    
+
     logger.info('Статус проверки работы изменился')
-    
+
     return f'Преподаватель проверил работу "{lesson_title}". \n \n {lesson_url} \n \n {lesson_assessment}'
 
 
@@ -50,7 +50,7 @@ def main():
 
     logger.setLevel(logging.INFO)
     logger.addHandler(TelegramLogsHandler(bot_token, chat_id))
-    
+
     params = {}
     headers = {'Authorization': f'Token {devman_token}'}
 
@@ -59,7 +59,12 @@ def main():
 
     while True:
         try:
-            response = requests.get(DEVMAN_URL, headers=headers, params=params, timeout=devman_timeout)
+            response = requests.get(
+                DEVMAN_URL,
+                headers=headers,
+                params=params,
+                timeout=devman_timeout
+            )
             response.raise_for_status()
 
             review_summary = response.json()
