@@ -29,6 +29,38 @@ pip install -r requirements.txt
 ```
 python bot.py
 ```
+## Docker
+
+Можно запустить бота как Docker-контейнер. Для этого нужно перейти в терминале в папку проекта и выполнить следующие шаги.
+
+Сначала создаем Docker-образ. **bot-review-notification** в данном случае - это имя образа.
+
+```
+docker build -t bot-review-notification .
+```
+Далее на основе полученного образа создаем Docker-контейнер и запускаем его. В приведенном примере понадобится файл **.env**, структура которого описана выше. Также можно передать все необходимые параметры в командной строке (см. [документацию](https://docs.docker.com/engine/reference/commandline/run/#env)).
+
+```
+docker run -d --env-file .env bot-review-notification
+``````
+
+После этого контейнер появится в списке запущенных. Проверяем: 
+
+```
+docker ps
+```
+
+Если контейнер почему-то не стартовал, ищем его ID:
+
+```
+docker container ls -a -s
+```
+
+И смотрим логи:
+
+```
+docker logs <container_id>
+```
 
 ## Цели проекта
 
